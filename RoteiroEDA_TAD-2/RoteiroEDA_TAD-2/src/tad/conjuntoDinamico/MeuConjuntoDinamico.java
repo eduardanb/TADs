@@ -1,59 +1,112 @@
 package tad.conjuntoDinamico;
 
+import java.util.NoSuchElementException;
+
 public class MeuConjuntoDinamico implements ConjuntoDinamicoIF<Integer>{
 
-	
-	private Integer[] meusDados = null;
-	private int posInsercao = 0;
-	
-	@Override
-	public void inserir(Integer item) {
-		throw new UnsupportedOperationException("Implementar");
-		
-	}
-	
-	private Integer[] aumentarArray() {
-		// criar um array maior (arrayMaior)
-			// Qual é a taxa de aumento desse array?
-		// copiar os dados de meusDados (array cheio)
-		// colar os dados para o novo array (arrayMaior)
-		return null;
-	}
+    private Integer[] meusDados = new Integer[10];
+    private int posInsercao = 0;
 
-	@Override
-	public Integer remover(Integer item) {
-		throw new UnsupportedOperationException("Implementar");
-		
-	}
+    @Override
+    public void inserir(Integer item) {
+        if (item == null) return;
+        // Permite duplicados!
+        if (posInsercao == meusDados.length) {
+            meusDados = aumentarArray();
+        }
+        meusDados[posInsercao++] = item;
+    }
 
-	@Override
-	public Integer predecessor(Integer item) {
-		throw new UnsupportedOperationException("Implementar");
-	}
+    private Integer[] aumentarArray() {
+        int novoTamanho = meusDados.length * 2;
+        Integer[] arrayMaior = new Integer[novoTamanho];
+        for (int i = 0; i < meusDados.length; i++) {
+            arrayMaior[i] = meusDados[i];
+        }
+        return arrayMaior;
+    }
 
-	@Override
-	public Integer sucessor(Integer item) {
-		throw new UnsupportedOperationException("Implementar");
-	}
+    @Override
+    public Integer remover(Integer item) {
+        for (int i = 0; i < posInsercao; i++) {
+            if (meusDados[i].equals(item)) {
+                Integer removido = meusDados[i];
+                for (int j = i; j < posInsercao - 1; j++) {
+                    meusDados[j] = meusDados[j + 1];
+                }
+                meusDados[--posInsercao] = null;
+                return removido;
+            }
+        }
+        throw new NoSuchElementException("Elemento não encontrado");
+    }
 
-	@Override
-	public int tamanho() {
-		throw new UnsupportedOperationException("Implementar");
-	}
+    @Override
+    public Integer predecessor(Integer item) {
+        if (posInsercao == 0) throw new NoSuchElementException("Conjunto vazio");
+        Integer pred = null;
+        for (int i = 0; i < posInsercao; i++) {
+            if (meusDados[i] < item) {
+                if (pred == null || meusDados[i] > pred) {
+                    pred = meusDados[i];
+                }
+            }
+        }
+        if (pred == null) throw new NoSuchElementException("Sem predecessor");
+        return pred;
+    }
 
-	@Override
-	public Integer buscar(Integer item) {
-		throw new UnsupportedOperationException("Implementar");
-	}
+    @Override
+    public Integer sucessor(Integer item) {
+        if (posInsercao == 0) throw new NoSuchElementException("Conjunto vazio");
+        Integer suc = null;
+        for (int i = 0; i < posInsercao; i++) {
+            if (meusDados[i] > item) {
+                if (suc == null || meusDados[i] < suc) {
+                    suc = meusDados[i];
+                }
+            }
+        }
+        if (suc == null) throw new NoSuchElementException("Sem sucessor");
+        return suc;
+    }
 
-	@Override
-	public Integer minimum() {
-		throw new UnsupportedOperationException("Implementar");
-	}
+    @Override
+    public int tamanho() {
+        return posInsercao;
+    }
 
-	@Override
-	public Integer maximum() {
-		throw new UnsupportedOperationException("Implementar");
-	}
+    @Override
+    public Integer buscar(Integer item) {
+        for (int i = 0; i < posInsercao; i++) {
+            if (meusDados[i].equals(item)) {
+                return meusDados[i];
+            }
+        }
+        throw new NoSuchElementException("Elemento não encontrado");
+    }
 
+    @Override
+    public Integer minimum() {
+        if (posInsercao == 0) throw new NoSuchElementException("Conjunto vazio");
+        Integer min = meusDados[0];
+        for (int i = 1; i < posInsercao; i++) {
+            if (meusDados[i] < min) {
+                min = meusDados[i];
+            }
+        }
+        return min;
+    }
+
+    @Override
+    public Integer maximum() {
+        if (posInsercao == 0) throw new NoSuchElementException("Conjunto vazio");
+        Integer max = meusDados[0];
+        for (int i = 1; i < posInsercao; i++) {
+            if (meusDados[i] > max) {
+                max = meusDados[i];
+            }
+        }
+        return max;
+    }
 }
