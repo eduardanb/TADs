@@ -13,6 +13,14 @@ public class NodoListaDuplamenteEncadeada<T extends Comparable<T>> extends NodoL
 		super(null);
 		this.anterior = null;
 	}
+
+	public NodoListaDuplamenteEncadeada<T> getProximo() {
+		return (NodoListaDuplamenteEncadeada<T>) proximo;
+	}
+
+    public void setProximo(NodoListaDuplamenteEncadeada<T> proximo) {
+        this.proximo = proximo;
+    }
 	
 	public NodoListaDuplamenteEncadeada<T> getAnterior() {
 		return anterior;

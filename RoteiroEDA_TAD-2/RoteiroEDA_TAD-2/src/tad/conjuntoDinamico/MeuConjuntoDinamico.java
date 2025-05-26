@@ -2,7 +2,7 @@ package tad.conjuntoDinamico;
 
 import java.util.NoSuchElementException;
 
-public class MeuConjuntoDinamico implements ConjuntoDinamicoIF<Integer>{
+public class MeuConjuntoDinamico implements ConjuntoDinamicoIF<Integer> {
 
     private Integer[] meusDados = new Integer[10];
     private int posInsercao = 0;
@@ -10,7 +10,6 @@ public class MeuConjuntoDinamico implements ConjuntoDinamicoIF<Integer>{
     @Override
     public void inserir(Integer item) {
         if (item == null) return;
-        // Permite duplicados!
         if (posInsercao == meusDados.length) {
             meusDados = aumentarArray();
         }
@@ -20,14 +19,15 @@ public class MeuConjuntoDinamico implements ConjuntoDinamicoIF<Integer>{
     private Integer[] aumentarArray() {
         int novoTamanho = meusDados.length * 2;
         Integer[] arrayMaior = new Integer[novoTamanho];
-        for (int i = 0; i < meusDados.length; i++) {
-            arrayMaior[i] = meusDados[i];
-        }
+        System.arraycopy(meusDados, 0, arrayMaior, 0, meusDados.length);
         return arrayMaior;
     }
 
     @Override
     public Integer remover(Integer item) {
+        if (item == null) {
+            throw new NoSuchElementException("Elemento não pode ser nulo");
+        }
         for (int i = 0; i < posInsercao; i++) {
             if (meusDados[i].equals(item)) {
                 Integer removido = meusDados[i];
@@ -43,6 +43,9 @@ public class MeuConjuntoDinamico implements ConjuntoDinamicoIF<Integer>{
 
     @Override
     public Integer predecessor(Integer item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Item não pode ser nulo");
+        }
         if (posInsercao == 0) throw new NoSuchElementException("Conjunto vazio");
         Integer pred = null;
         for (int i = 0; i < posInsercao; i++) {
@@ -58,6 +61,9 @@ public class MeuConjuntoDinamico implements ConjuntoDinamicoIF<Integer>{
 
     @Override
     public Integer sucessor(Integer item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Item não pode ser nulo");
+        }
         if (posInsercao == 0) throw new NoSuchElementException("Conjunto vazio");
         Integer suc = null;
         for (int i = 0; i < posInsercao; i++) {
@@ -78,6 +84,9 @@ public class MeuConjuntoDinamico implements ConjuntoDinamicoIF<Integer>{
 
     @Override
     public Integer buscar(Integer item) {
+        if (item == null) {
+            throw new NoSuchElementException("Elemento não encontrado");
+        }
         for (int i = 0; i < posInsercao; i++) {
             if (meusDados[i].equals(item)) {
                 return meusDados[i];
