@@ -47,6 +47,14 @@ public class MeuConjuntoDinamico implements ConjuntoDinamicoIF<Integer> {
             throw new IllegalArgumentException("Item não pode ser nulo");
         }
         if (posInsercao == 0) throw new NoSuchElementException("Conjunto vazio");
+        boolean existe = false;
+        for (int i = 0; i < posInsercao; i++) {
+            if (meusDados[i].equals(item)) {
+                existe = true;
+                break;
+            }
+        }
+        if (!existe) throw new NoSuchElementException("Elemento não existe");
         Integer pred = null;
         for (int i = 0; i < posInsercao; i++) {
             if (meusDados[i] < item) {

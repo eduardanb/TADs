@@ -9,10 +9,8 @@ package tad.fila;
 public class MinhaFila implements FilaIF<Integer> {
     
     private int tamanho = 10;
-    
-    private int cauda = 1;
+    private int cauda = 0;
     private int cabeca = 0;
-    
     private Integer[] meusDados = null;
 
     public MinhaFila(int tamanhoInicial) {
@@ -38,32 +36,33 @@ public class MinhaFila implements FilaIF<Integer> {
         if (isEmpty()) {
             throw new FilaVaziaException();
         }
-        cabeca = (cabeca + 1) % tamanho;
         Integer item = meusDados[cabeca];
         meusDados[cabeca] = null;
+        cabeca = (cabeca + 1) % tamanho;
         return item;
     }
 
     @Override
     public Integer verificarCauda() {
+        if (isEmpty()) return null;
         int pos = (cauda - 1 + tamanho) % tamanho;
         return meusDados[pos];
     }
 
     @Override
     public Integer verificarCabeca() {
-        int pos = (cabeca + 1) % tamanho;
-        return meusDados[pos];
+        if (isEmpty()) return null;
+        return meusDados[cabeca];
     }
 
     @Override
     public boolean isEmpty() {
-        return cabeca == cauda && meusDados[(cabeca + 1) % tamanho] == null;
+        return cabeca == cauda && meusDados[cabeca] == null;
     }
 
     @Override
     public boolean isFull() {
-        return cabeca == cauda && meusDados[(cabeca + 1) % tamanho] != null;
+        return cabeca == cauda && meusDados[cabeca] != null;
     }
 
 }
